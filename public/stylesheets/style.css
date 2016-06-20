@@ -6,3 +6,34 @@ body {
 a {
   color: #00B7FF;
 }
+
+.boardcard {
+  margin: 50px;
+  height: 600px;
+  width: 600px;
+}
+
+.boardgrid {
+  height: 500px;
+  width: 500px;
+  align-self: center;
+}
+
+.boardrow {
+  height: 125px;
+}
+
+.boardbutton {
+  height: 121px;
+  width: 121px;
+}
+
+.boardbutton.done {
+  background-color: red;
+}
+
+.scorecard {
+  margin: 50px;
+  height: 600px;
+  width: 300px;
+}
