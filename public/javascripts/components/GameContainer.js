@@ -17,7 +17,7 @@ class GameContainer extends React.Component {
 
   componentDidMount() {
     var that = this
-    socket.connect('http://localhost:3000', function() {
+    socket.connect(function() {
       socket.createGame(4, function(game) {
         that.setState({gameID: game._id})
         socket.createPlayer('Player 1', function(player) {

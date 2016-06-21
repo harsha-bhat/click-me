@@ -4,8 +4,8 @@ var socket
 
 module.exports = {}
 
-module.exports.connect = function(host, callback) {
-  socket = io(host)
+module.exports.connect = function(callback) {
+  socket = io()
   socket.on('connect', function() {
     console.log('connected to server')
     callback()
