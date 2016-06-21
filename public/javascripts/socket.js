@@ -5,7 +5,7 @@ var socket
 module.exports = {}
 
 module.exports.connect = function(callback) {
-  socket = io()
+  socket = io(window.location.hostname)
   socket.on('connect', function() {
     console.log('connected to server')
     callback()
