@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 
 var playerSchema = new Schema({
     name: String,
-    squares: []
+    squares: [],
+    color: String
 });
 
 var Player = mongoose.model('Player', playerSchema);

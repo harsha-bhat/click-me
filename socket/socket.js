@@ -31,7 +31,7 @@ module.exports = function (server) {
       var player = data.player;
       var gameID = data.gameID;
 
-      Game.joinGame(player, gameID, function(game) {
+      Game.joinGame(player, gameID, function(player, game) {
           io.sockets.emit('joined-game', {player: player, game: game});
       })
     })

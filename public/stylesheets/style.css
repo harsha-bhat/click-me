@@ -37,3 +37,16 @@ a {
   height: 600px;
   width: 300px;
 }
+
+.login {
+  margin: 50px;
+  align-items: center;
+}
+
+.listing {
+  margin: 50px;
+}
+
+.form-elem {
+  margin-left: 30px;
+}

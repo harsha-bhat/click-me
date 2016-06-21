@@ -17,7 +17,7 @@ class GameContainer extends React.Component {
 
   componentDidMount() {
     var that = this
-    socket.connect('http://localhost:3000', function() {
+    socket.connect('http://localhost:3001', function() {
       socket.createGame(4, function(game) {
         that.setState({gameID: game._id})
         socket.createPlayer('Player 1', function(player) {
@@ -25,6 +25,7 @@ class GameContainer extends React.Component {
           socket.joinGame(that.state.currentPlayer, that.state.gameID, function(data) {
             if (that.state.players.length === 0 && data.game.players.length > 0) {
               console.log("setting players from game");
+              console.log(data.game.players);
               that.setState({players: data.game.players})
             }
             that.addPlayer(data.player)

@@ -4,12 +4,18 @@ var Player = require('./Player');
 var _ = require('lodash');
 
 var gameSchema = new Schema({
-    size: Number,
-    players: [Player.Schema],
-    squares: [Number],
-    total: {
+    size: {
       type: Number,
-      default: 0
+      default: 4
+    },
+    title: {
+      type: String,
+      default: 'Multiplayer Game'
+    },
+    players: [Player.Schema],
+    maxPlayers: {
+      type: Number,
+      default: 6
     }
 });
 
@@ -36,12 +42,14 @@ module.exports.clearAll = function(callback) {
 }
 
 module.exports.joinGame = function(player, gameID, callback) {
+  var playerColors = ['blue', 'red', 'yellow', 'green', 'purple', 'black'];
   Game.findById(gameID, function(error, game) {
+    player.color = playerColors[game.players.length];
     game.players.push(player);
     game.save(function(err) {
       if (!err) {
-        console.log("Player " + player._id + " joined game " + game._id);
-        callback(game);
+        console.log("Player " + player._id + " joined game " + game._id + " color " + player.color);
+        callback(player, game);
       } else {
         console.log("error joining game");
         callback(null);
@@ -70,9 +78,28 @@ module.exports.selectSquare = function(gameID, playerID, squareID, callback) {
           return p;
         })(game.players)
         player.squares.push(squareID);
-        callback(true);
+        game.save(function(err) {
+          if (!err) {
+            callback(true);
+          } else {
+            console.log("error selecting square");
+            callback(null);
+          }
+        })
+
     } else {
       console.log("error selecting square");
+      callback(null);
+    }
+  })
+}
+
+module.exports.getAll = function(callback) {
+  Game.find({}, function(err, games) {
+    if (!err) {
+      callback(games);
+    } else {
+      console.log("error fetching games");
       callback(null);
     }
   })

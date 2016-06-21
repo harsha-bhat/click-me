@@ -2,7 +2,6 @@ import React from 'react'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Header from './Header'
-import GameContainer from './GameContainer'
 
 class Layout extends React.Component {
   render () {
@@ -10,7 +9,7 @@ class Layout extends React.Component {
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div className='layout'>
           <Header></Header>
-          <GameContainer></GameContainer>
+          {this.props.children}
         </div>
       </MuiThemeProvider>
     )

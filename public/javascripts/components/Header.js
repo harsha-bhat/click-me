@@ -10,7 +10,7 @@ class Header extends React.Component {
           top: 0,
           left: 0,
           zIndex: 1101
-        }}/>} />
+        }} showMenuIconButton={false}/>} />
       </div>
     )
   }

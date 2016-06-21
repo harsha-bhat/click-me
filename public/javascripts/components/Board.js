@@ -4,49 +4,47 @@ import {Grid, Row, Col} from 'react-bootstrap'
 
 class Board extends React.Component {
   buttonClick(e) {
-    console.log(e.target.id)
-    e.target.className = 'boardbutton done'
-    this.props.select(e.target.id)
+    var colColors = this.getColColors(this.props.players)
+    if (!colColors[e.target.id]) {
+      this.props.select(e.target.id)
+    }
   }
 
-  renderBoard(size) {
-    for (var i = 1; i <= size; i++) {
-      for (var j = 1; j <= size; j++) {
+  getColColors (players) {
+    var colColors = {}
+    players.forEach(function(player) {
+      player.squares.forEach(function(sq) {
+        colColors[sq] = player.color
+      })
+    })
+    return colColors
+  }
 
+  renderGrid(size, players) {
+    var colColors = this.getColColors(players)
+
+    var rows = []
+    var key = 1
+    for (var i = 1; i <= size; i++) {
+      var cols = []
+      for (var j = 1; j <= size; j++) {
+        if (colColors[key]) {
+          cols.push(<Col key={key} md={3}><button id={key} onClick={this.buttonClick.bind(this)} className='boardbutton' style={{'backgroundColor':colColors[key]}}></button></Col>)
+        } else {
+          cols.push(<Col key={key} md={3}><button id={key} onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>)
+        }
+        key++
       }
+      rows.push(<Row key={i} className='boardrow'>{cols}</Row>)
     }
+    return(<Grid className='boardgrid'>{rows}</Grid>)
   }
 
   render () {
     return (
       <div className='board'>
         <Card className='boardcard' zDepth={2}>
-          <Grid className='boardgrid'>
-            <Row className='boardrow'>
-              <Col md={3}><button id='1' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-              <Col md={3}><button id='2' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-              <Col md={3}><button id='3' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-              <Col md={3}><button id='4' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-            </Row>
-            <Row className='boardrow'>
-              <Col md={3}><button id='5' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-              <Col md={3}><button id='6' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-              <Col md={3}><button id='7' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-              <Col md={3}><button id='8' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-            </Row>
-            <Row className='boardrow'>
-              <Col md={3}><button id='9' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-              <Col md={3}><button id='10' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-              <Col md={3}><button id='11' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-              <Col md={3}><button id='12' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-            </Row>
-            <Row className='boardrow'>
-              <Col md={3}><button id='13' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-              <Col md={3}><button id='14' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-              <Col md={3}><button id='15' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-              <Col md={3}><button id='16' onClick={this.buttonClick.bind(this)} className='boardbutton'></button></Col>
-            </Row>
-          </Grid>
+          {this.renderGrid(this.props.size, this.props.players)}
         </Card>
       </div>
     )
