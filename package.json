@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "server": "nodemon ./bin/www",
-    "client": "watchify -t [ envify --NOVE_ENV development ] -t [ babelify --presets [ react es2015 ] ] public/javascripts/index.js -o public/javascripts/build/bundle.js -v",
-    "start": "concurrently \"npm run server\" \"npm run client\""
+    "dev-server": "nodemon ./bin/www",
+    "dev-client": "watchify -t [ envify --NOVE_ENV development ] -t [ babelify --presets [ react es2015 ] ] public/javascripts/index.js -o public/javascripts/build/bundle.js -v",
+    "dev": "concurrently \"npm run dev-server\" \"npm run dev-client\"",
+    "build": "browserify -t [ envify --NOVE_ENV production ] -t [ babelify --presets [ react es2015 ] ] -g uglifyify public/javascripts/index.js -o public/javascripts/build/bundle.js",
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
