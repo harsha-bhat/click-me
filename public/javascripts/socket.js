@@ -5,7 +5,7 @@ var socket
 module.exports = {}
 
 module.exports.connect = function(callback) {
-  socket = io.connect()
+  socket = io.connect('https://click-me-grid.herokuapp.com/')
   socket.on('connect', function() {
     console.log('connected to server')
     callback()
