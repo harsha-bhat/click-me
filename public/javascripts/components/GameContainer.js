@@ -11,7 +11,8 @@ class GameContainer extends React.Component {
       currentPlayer: null,
       size: 4,
       players: [],
-      total: 0
+      modalOpen: false,
+      winner: ''
     }
   }
 
@@ -34,6 +35,7 @@ class GameContainer extends React.Component {
       })
 
       socket.selectSquareListener(that.selectSquareListener.bind(that))
+      socket.leaveGameListener(that.leaveGameListener.bind(that))
     })
   }
 
@@ -43,6 +45,21 @@ class GameContainer extends React.Component {
       console.log("Adding player")
       var players = this.state.players
       players.push(player)
+      this.setState({players: players})
+    }
+  }
+
+  removePlayer (playerID) {
+    console.log("remove player " + playerID);
+    var p = _.find(this.state.players, {_id: playerID})
+    if (p) {
+      console.log("Removing player")
+      var players = []
+      this.state.players.forEach(function(player) {
+        if (player._id != playerID) {
+          players.push(player)
+        }
+      })
       this.setState({players: players})
     }
   }
@@ -58,11 +75,36 @@ class GameContainer extends React.Component {
     var player = _.find(players, {_id: playerID})
     player.squares.push(squareID)
     this.setState({players: players})
+
+    var squareCount = 0
+    players.forEach(function(player) {
+      squareCount += player.squares.length
+    })
+    if (squareCount >= (this.state.size*this.state.size)) {
+      var maxScore = 0
+      var winner = ''
+      players.forEach(function(player) {
+        if (player.squares.length > maxScore) {
+          maxScore = player.squares.length
+          winner = player.name
+        }
+      })
+      this.setState({winner: winner, modalOpen: true})
+    }
+  }
+
+  leaveGameListener (data) {
+    var playerID = data.playerID
+    this.removePlayer(playerID)
+  }
+
+  closeModal () {
+    this.setState({modalOpen: false})
   }
 
   render () {
     return (
-      <GameLayout size={this.state.size} players={this.state.players} select={this.selectSquare.bind(this)}></GameLayout>
+      <GameLayout winner={this.state.winner} modalOpen={this.state.modalOpen} closeModal={this.closeModal.bind(this)} size={this.state.size} players={this.state.players} select={this.selectSquare.bind(this)}></GameLayout>
     )
   }
 }

@@ -17,7 +17,10 @@ class Listing extends React.Component {
       super()
       this.state = {
         open: false,
-        value: 4
+        join: false,
+        size: 4,
+        maxPlayers: 4,
+        name: ''
       }
   }
 
@@ -29,8 +32,24 @@ class Listing extends React.Component {
     this.setState({open: false})
   }
 
-  handleChange (event, index, value) {
-    this.setState({value: value})
+  handleSizeChange (event, index, value) {
+    this.setState({size: value})
+  }
+
+  handleMaxPlayerChange (event, index, value) {
+    this.setState({maxPlayers: value})
+  }
+
+  handleJoinOpen () {
+    this.setState({join: true})
+  }
+
+  handleJoinClose () {
+    this.setState({join: false})
+  }
+
+  handleNameChange (e) {
+    this.setState({name: e.target.value})
   }
 
   renderListItems (games, click) {
@@ -60,12 +79,26 @@ class Listing extends React.Component {
      />,
    ];
 
+   const joinActions = [
+    <FlatButton
+      label="Cancel"
+      primary={true}
+      onTouchTap={this.handleJoinClose.bind(this)}
+    />,
+    <FlatButton
+      label="Submit"
+      primary={true}
+      keyboardFocused={true}
+      onTouchTap={this.handleJoinClose.bind(this)}
+    />,
+  ];
+
     return (
       <div className='listing'>
         <Paper zDepth={2}>
           <List>
               <Subheader>Games In Progress</Subheader>
-              {this.renderListItems(this.props.games, this.handleOpen.bind(this))}
+              {this.renderListItems(this.props.games, this.handleJoinOpen.bind(this))}
               <Divider />
               <ListItem id={'new'} primaryText="Create New" onTouchTap={this.handleOpen.bind(this)} leftIcon={
                   <ContentAdd />
@@ -79,11 +112,11 @@ class Listing extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose.bind(this)}
         >
-        <TextField hintText="Enter Your Name"/>
+        <TextField hintText="Enter Your Name" value={this.state.name} onChange={this.handleNameChange.bind(this)}/>
         <br />
         <SelectField
-          value={this.state.value}
-          onChange={this.handleChange.bind(this)}
+          value={this.state.size}
+          onChange={this.handleSizeChange.bind(this)}
           floatingLabelText="Size"
           floatingLabelFixed={true}
         >
@@ -91,7 +124,29 @@ class Listing extends React.Component {
           <MenuItem value={4} primaryText="4 x 4" />
           <MenuItem value={5} primaryText="5 x 5" />
         </SelectField>
+        <br />
+        <SelectField
+          value={this.state.maxPlayers}
+          onChange={this.handleMaxPlayerChange.bind(this)}
+          floatingLabelText="Maximum Players"
+          floatingLabelFixed={true}
+        >
+          <MenuItem value={2} primaryText="2 Players" />
+          <MenuItem value={3} primaryText="3 Players" />
+          <MenuItem value={4} primaryText="4 Players" />
+          <MenuItem value={5} primaryText="5 Players" />
+          <MenuItem value={6} primaryText="6 Players" />
+        </SelectField>
         </Dialog>
+        <Dialog
+          title="Join Game"
+          actions={joinActions}
+          modal={false}
+          open={this.state.join}
+          onRequestClose={this.handleJoinClose.bind(this)}
+        >
+          <TextField hintText="Enter Your Name" value={this.state.name} onChange={this.handleNameChange.bind(this)}/>
+      </Dialog>
       </div>
     )
   }

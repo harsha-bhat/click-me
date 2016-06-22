@@ -104,3 +104,30 @@ module.exports.getAll = function(callback) {
     }
   })
 }
+
+module.exports.leaveGame = function(playerID, gameID, callback) {
+  Game.findById(gameID, function(err, game) {
+    if (!err && game) {
+      var players = [];
+      game.players.forEach(function(player) {
+        if (player._id.toString() != playerID) {
+          players.push(player);
+        }
+      })
+      game.players = players;
+      game.save(function(err) {
+        if (!err) {
+          callback(game);
+        } else {
+          callback(null);
+        }
+      });
+    } else {
+      callback(null);
+    }
+  })
+}
+
+module.exports.removeGame = function(gameID) {
+  // TODO
+}

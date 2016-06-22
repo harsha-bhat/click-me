@@ -5,7 +5,7 @@ var socket
 module.exports = {}
 
 module.exports.connect = function(callback) {
-  socket = io.connect('https://click-me-grid.herokuapp.com/')
+  socket = io.connect()
   socket.on('connect', function() {
     console.log('connected to server')
     callback()
@@ -48,6 +48,13 @@ module.exports.selectSquare = function(gameID, playerID, squareID) {
 module.exports.selectSquareListener = function(callback) {
   socket.on('square-selected', function(data) {
     console.log('square selected')
+    callback(data)
+  })
+}
+
+module.exports.leaveGameListener = function(callback) {
+  socket.on('left-game', function(data) {
+    console.log('left game');
     callback(data)
   })
 }

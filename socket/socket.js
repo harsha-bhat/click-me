@@ -11,6 +11,7 @@ module.exports = function (server) {
   })
 
   io.on('connection', function(socket) {
+    var connectionData = {};
     console.log("Connected to a client");
     socket.on('news', function(message) {
       console.log("Responding with news");
@@ -23,6 +24,7 @@ module.exports = function (server) {
 
     socket.on('player-create', function(name) {
       Player.createPlayer(name, function(player) {
+        connectionData.playerID = player._id;
         socket.emit('player-created', player);
       })
     })
@@ -32,6 +34,7 @@ module.exports = function (server) {
       var gameID = data.gameID;
 
       Game.joinGame(player, gameID, function(player, game) {
+          connectionData.gameID = gameID;
           io.sockets.emit('joined-game', {player: player, game: game});
       })
     })
@@ -50,5 +53,17 @@ module.exports = function (server) {
       })
     })
 
+    socket.on('disconnect', function() {
+      console.log('Player ' + connectionData.playerID + ' disconnected from game ' + connectionData.gameID);
+      Game.leaveGame(connectionData.playerID, connectionData.gameID, function(game) {
+        if (game) {
+          console.log("left game");
+          io.sockets.emit('left-game', {playerID: connectionData.playerID});
+            if (game.players.length === 0) {
+              Game.removeGame(connectionData.gameID);
+            }
+        }
+      })
+    })
   })
 }

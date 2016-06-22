@@ -6,9 +6,12 @@ class ScoreBoard extends React.Component {
   getScores (players) {
     let scores = players.map(function(player) {
       return (
-        <CardText key={player._id}>
-          <b>{player.name}</b> : {player.squares.length}
-        </CardText>
+        <div key={player._id}>
+          <CardText>
+            <button disabled={true} style={{backgroundColor: player.color, height:10, width:10, margin:10}}/>
+            <b>{player.name}</b> : {player.squares.length}
+          </CardText>
+        </div>
       )
     })
     return scores
