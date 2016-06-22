@@ -27,7 +27,7 @@ app.use('/', routes);
 app.use('/games', games);
 
 // Connect to db
-mongoose.connect('mongodb://127.0.0.1:27017/clickmedb');
+mongoose.connect('mongodb://harsha:clickmedb@ds021434.mlab.com:21434/clickmedb');
 mongoose.connection.on('error', function(error) {
   console.log(error);
 })
