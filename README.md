@@ -1,4 +1,4 @@
-# click-me
+# fastest-click-tiles-game
 
 ## Multiplayer Online Game Using Node.js, React.js and Socket.io 
 
